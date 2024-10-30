@@ -37,3 +37,39 @@ int main() {
 
     return 0;
 }
+
+
+
+
+
+#include<iostream>
+#include<unistd.h>
+#include<fcntl.h>
+#include<sys/ipc.h>
+#include<sys/shm.h>
+#include<cstring>
+
+
+int main()
+{
+int key = 8787;   #officiaLLY TOP MAKE BETTER KEY : key_t key = ftok("sssfile",67)  random integer and file 
+int shmid = shmget(key, 1028, 0644|IPC_CREAT);
+char* sh = (char *)shmat(shmid, nullptr,0);
+
+pid_t child = fork();
+
+if( child == 0)
+{
+ strcpy(sh, "hellp i am child");
+ }
+ else
+ {
+ strcpy(sh, "hello, i am parent");
+ }
+ 
+ std::cout<<"message in shared memeory " <<sh;
+ 
+ shmdt(sh);
+ 
+ return -1;
+ }
