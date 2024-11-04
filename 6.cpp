@@ -33,7 +33,7 @@ int main() {
         bool process_found = false; // Track if any process can be executed
         for (int i = 0; i < limit; i++) {
             // Check if the process is ready to execute
-            if (remaining_time[i] > 0 && arrival_time[i] <= total_time) {
+            if (remaining_time[i] > 0 && arrival_time[i] <= total_time) {   //this if checks is any process is excutabel , means its availabe to be executed
                 process_found = true; // A process is ready to execute
                 if (remaining_time[i] <= time_quantum) {
                     total_time += remaining_time[i];
@@ -54,13 +54,15 @@ int main() {
                     remaining_time[i] -= time_quantum;
                     total_time += time_quantum;
                 }
-            }
-        }
+            }// end of big if { that searches if there is any process exxecuatbale)
+        }    //end of for that iterates through process
+
+
         // If no process was found to execute, increment the total time to avoid an infinite loop
         if (!process_found) {
             total_time++;
         }
-    }
+    }  //end of while
 
     // Calculate averages
     float average_wait_time = wait_time / limit;
