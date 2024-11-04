@@ -1,72 +1,58 @@
-//priority 
-
-
 #include <iostream>
-#include <iomanip>
 using namespace std;
 
 int main() {
-    int limit, completed_processes = 0;
-    float total_time = 0, wait_time = 0, arrival_time[10], burst_time[10], remaining_time[10], turnaround_time[10], priority[10];
-
-    cout << "Enter Total Number of Processes: ";
+    int priority[10], arrive[10], burst[10], remain[10];
+    int limit;
+    cout << "enter total process" << endl;
     cin >> limit;
 
-    for (int i = 0; i < limit; i++) {
-        cout << "\nEnter Arrival Time for Process[" << i + 1 << "]: ";
-        cin >> arrival_time[i];
-        cout << "Enter Burst Time for Process[" << i + 1 << "]: ";
-        cin >> burst_time[i];
-        cout << "Enter Priority for Process[" << i + 1 << "]: ";
+    for (int i = 1; i <= limit; i++) {
+        cout << "enter process " << i << " details" << endl;
+        cout << "enter arrive time:" << endl;
+        cin >> arrive[i];
+        cout << "enter burst time:" << endl;
+        cin >> burst[i];
+        remain[i] = burst[i];
+        cout << "enter priotiy:" << endl;
         cin >> priority[i];
-        remaining_time[i] = burst_time[i]; // Initialize remaining time
     }
 
-    cout << "\nProcess ID\tBurst Time\tPriority\tTurnaround Time\tWaiting Time\n";
+    int complete = 0;
+    int total = 0;
+    int waiting_total = 0;
 
-    // Priority Scheduling
-    while (completed_processes < limit) {
+    while (complete < limit) {
         int idx = -1;
-        float highest_priority = 9999; // Initialize with a large number
+        int high = 999;
 
-        // Find the highest priority process that has arrived and is remaining
-        for (int i = 0; i < limit; i++) {
-            if (remaining_time[i] > 0 && arrival_time[i] <= total_time) {
-                if (priority[i] < highest_priority) { // Lower number means higher priority
-                    highest_priority = priority[i];
-                    idx = i; // Track the index of the highest priority process
+        for (int i = 1; i <= limit; i++) {
+            if (remain[i] > 0 && arrive[i] <= total) {
+                if (priority[i] < high) {
+                    high = priority[i];
+                    idx = i;
                 }
             }
-        }
+        }                                        //end of for loop
 
-        // If we found a process to execute
         if (idx != -1) {
-            total_time += remaining_time[idx]; // Increment total time by the burst time
-            remaining_time[idx] = 0; // Mark process as completed
-            completed_processes++;
+            total += remain[idx];
+            remain[idx] = 0;
+            complete++;
 
-            turnaround_time[idx] = total_time - arrival_time[idx]; // Calculate turnaround time
-            float waiting_time = turnaround_time[idx] - burst_time[idx]; // Calculate waiting time
+            float total_turnaround = total - arrive[idx];
+            float wait_time = total_turnaround - burst[idx];
 
-            cout << "Process[" << idx + 1 << "]\t\t" 
-                 << burst_time[idx] << "\t\t" 
-                 << priority[idx] << "\t\t" 
-                 << turnaround_time[idx] << "\t\t\t" 
-                 << waiting_time << endl;
-
-            wait_time += waiting_time; // Accumulate total waiting time
+            waiting_total += wait_time;
+            cout << " turn around " << total_turnaround << " wait " << wait_time
+                 << " arrived at " << arrive[idx] << " for process " << idx << endl;
         } else {
-            // If no process is found, increment total time
-            total_time++;
+            total += 1;
         }
-    }
+    }  //end of while
 
-    // Calculate averages
-    float average_wait_time = wait_time / limit;
-    float average_turnaround_time = total_time / limit; // Use total_time for TAT
-
-    cout << "\nAverage Waiting Time: " << average_wait_time;
-    cout << "\nAvg Turnaround Time: " << average_turnaround_time << endl;
+    cout << " average turnaround time " << total / limit << endl;
+    cout << " average waiting time " << waiting_total / limit << endl;
 
     return 0;
 }
