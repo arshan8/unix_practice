@@ -1,71 +1,62 @@
-//inter process communication with message queue
-
-//reciever
-
+//sender
 #include <iostream>
-#include <mqueue.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
 #include <cstring>
 
-#define QUEUE_NAME "/my_queue"
-#define MAX_MSG_SIZE 1024
+struct Message {
+    long msg_type;
+    char text[100];
+};
 
 int main() {
-    mqd_t mq;                        // Message queue descriptor
-    char buffer[MAX_MSG_SIZE];        // Buffer to store received message
+    key_t key = ftok("sssfile", 67);
+    int msgid = msgget(key, 0666 | IPC_CREAT);
 
-    // Open the message queue in read-only mode (O_RDONLY)
-    mq = mq_open(QUEUE_NAME, O_RDONLY);
-    if (mq == (mqd_t)-1) {
-        perror("Receiver: mq_open");  // Print error message if opening fails
-        return 1;
-    }
+    Message msg;
+    msg.msg_type = 1;
+    strcpy(msg.text, "Hello from the sender!");
 
-    // Receive the message from the queue
-    if (mq_receive(mq, buffer, MAX_MSG_SIZE, NULL) == -1) {
-        perror("Receiver: mq_receive");  // Print error message if receiving fails
-    } else {
-        std::cout << "Received: " << buffer << std::endl;  // Print the received message
-    }
+    msgsnd(msgid, &msg, sizeof(msg.text), 0);
+    std::cout << "Sender sent: " << msg.text << std::endl;
 
-    // Close the message queue
-    mq_close(mq);
+    return 0;
+}
+
+
+
+//recievr
+
+#include <iostream>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <cstring>
+
+struct Message {
+    long msg_type;
+    char text[100];
+};
+
+int main() {
+    key_t key = ftok("sssfile", 67);
+    int msgid = msgget(key, 0666 | IPC_CREAT);
+
+    Message msg;
+    msgrcv(msgid, &msg, sizeof(msg.text), 1, 0);
+    std::cout << "Receiver received: " << msg.text << std::endl;
+
+    msgctl(msgid, IPC_RMID, nullptr); // Cleanup message queue
     return 0;
 }
 
 
 
 
-//sender
-#include <iostream>     // For standard input/output
-#include <mqueue.h>     // For POSIX message queue functions
-#include <cstring>      // For strlen() to calculate the length of the message
-#include <unistd.h>     // For POSIX standard functions (not used here but included for consistency)
 
-#define QUEUE_NAME "/my_queue"  // Name of the message queue
-#define MAX_MSG_SIZE 256        // Maximum message size allowed in the queue
 
-int main() {
-    mqd_t mq;  // Message queue descriptor
 
-    // Create the message queue for writing (O_WRONLY) with create flag (O_CREAT) and permissions (0644)
-    mq = mq_open(QUEUE_NAME, O_CREAT | O_WRONLY, 0644, NULL);
-    if (mq == (mqd_t)-1) {  // Error checking for message queue creation
-        perror("Sender: mq_open");  // Print error message if mq_open fails
-        return 1;
-    }
 
-    // Create the message to send
-    const char* message = "Hi, this is from sender";
 
-    // Send the message to the message queue
-    if (mq_send(mq, message, strlen(message) + 1, 0) == -1) {  // +1 to include null terminator
-        perror("Sender: mq_send");  // Print error message if mq_send fails
-    } else {
-        std::cout << "Sent: " << message << std::endl;  // Print message sent confirmation
-    }
 
-    // Close the message queue
-    mq_close(mq);
-    return 0;
-}
+
 
