@@ -73,3 +73,24 @@ int main() {
 
     return 0;
 }
+
+
+
+Yes, you are absolutely correct in distinguishing the placement of the turnaround and waiting time calculations in both scheduling algorithms:
+
+Priority Scheduling:
+
+In Priority Scheduling, the turnaround and waiting time calculations happen outside both the for loop and the if statement that check for ready processes.
+    
+The for loop and if statement are only used to find the highest priority process that’s ready to execute. Once this process is identified and completes its execution, the turnaround and waiting times are calculated only after it has finished, outside the loop and the if condition.
+Round Robin Scheduling:
+
+
+
+In Round Robin, the turnaround and waiting time calculations occur inside both the for loop and the if condition that checks if a process is ready to execute.
+    
+Here, each process is allowed to execute only for a fixed time quantum, so these calculations are done immediately after each process’s time slice completes, or when the process finishes entirely. This means the calculations are directly part of the inner for loop, inside the if block that checks if a process can execute in the current cycle.
+So, in summary:
+
+Priority Scheduling: Calculations happen outside the for loop and if block.
+Round Robin: Calculations happen inside the for loop and if block for each eligible process during each time slice.
