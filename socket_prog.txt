@@ -1,0 +1,21 @@
+programs from gfg:
+
+use man socket, man bind, man etc etc to help usereself n code
+
+
+server.cpp:
+
+socket()
+bind()
+listen()
+accept()
+recv()
+close(clientSocket);
+close(serverSocket);
+
+client.cpp
+
+socket()
+connet()
+send()
+close(clientSocket);

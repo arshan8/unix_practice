@@ -1,0 +1,99 @@
+#include <iostream>
+#include <thread>
+
+void count1() {
+    for (int i = 1; i <= 100; ++i) {
+        std::cout << "Count1: " << i << std::endl;
+    }
+}
+
+void count2() {
+    for (int i = 1; i <= 100; ++i) {
+        std::cout << "Count2: " << i << std::endl;
+    }
+}
+
+int main() {
+    std::thread t1(count1);
+    std::thread t2(count2);
+
+    t1.join();  // Wait for count1 to finish
+    t2.join();  // Wait for count2 to finish
+
+    std::cout << "Both threads finished counting." << std::endl;
+    return 0;
+}
+
+
+execution: g++ -pthread program_name.cpp -o outputname, then ./outputname
+
+
+
+b)
+#include <iostream>
+#include <thread>
+
+void print_hello(int thread_num) {
+    std::cout << "Hello World from thread " << thread_num << std::endl;
+}
+
+int main() {
+    std::thread threads[5];  // Array to hold the thread objects
+
+    // Create 5 threads
+    for (int i = 0; i < 5; ++i) {
+        threads[i] = std::thread(print_hello, i + 1);  // Pass thread number (1 to 5)
+    }
+
+    // Wait for all threads to finish
+    for (int i = 0; i < 5; ++i) {
+        threads[i].join();
+    }
+
+    std::cout << "Main thread has finished creating all threads." << std::endl;
+
+    return 0;
+}
+
+
+//in thread: no create (only initialize), only join
+
+//in pthread: first create then join
+
+
+
+
+a)proper)
+#include <iostream>
+#include <pthread.h>
+
+void* count1(void* arg) {
+    for (int i = 1; i <= 100; ++i) {
+        std::cout << "Count1: " << i << std::endl;
+    }
+    return NULL;
+}
+
+void* count2(void* arg) {
+    for (int i = 1; i <= 100; ++i) {
+        std::cout << "Count2: " << i << std::endl;
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t t1, t2;
+
+    // Create the threads
+    pthread_create(&t1, NULL, count1, NULL);
+    pthread_create(&t2, NULL, count2, NULL);
+
+    // Wait for both threads to finish
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+
+    std::cout << "Both threads finished counting." << std::endl;
+
+    return 0;
+}
+
