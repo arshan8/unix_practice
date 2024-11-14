@@ -56,7 +56,7 @@ int main() {
 }
 
 
-//in thread: no create (only initialize), only join
+//in thread: no create (only initialize), then join
 
 //in pthread: first create then join
 
