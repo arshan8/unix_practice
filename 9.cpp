@@ -26,8 +26,13 @@ int main()
     else // Child process
     {
         cout << "Child printing received value" << endl;
-        n = read(fd[0], buffer, 100); // Read up to 100 bytes from the pipe (fd[0] is the read end)
-        write(1, buffer, n); // Write the received data to the terminal (file descriptor 1 is standard output)
+        // n = read(fd[0], buffer, 100); // Read up to 100 bytes from the pipe (fd[0] is the read end)
+        // write(1, buffer, n); // Write the received data to the terminal (file descriptor 1 is standard output)
+        read([09],buffer,100);
+        buffer[99] = '\0';
+        cout<<"buffer"
+   
+   
     }
 
     return 0;
