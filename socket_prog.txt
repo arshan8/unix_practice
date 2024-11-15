@@ -3,6 +3,15 @@
 use man socket, man bind, man etc etc to help usereself n code
 
 
+
+10)
+        s,b,l,a,s,c
+12)
+sender: s,b,l,a,r,c
+recievr:s,c,c
+
+
+
 server.cpp:
 
 socket()
@@ -11,7 +20,7 @@ listen()
 accept()
 recv()
 close(clientSocket);
-close(serverSocket);
+
 
 client.cpp
 

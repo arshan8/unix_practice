@@ -1,56 +1,61 @@
-#include <iostream>
-#include <thread>
+#include<iostream>
+#include<pthread.h>
+#include<thread>
+using namespace std;
 
-void count1() {
-    for (int i = 1; i <= 100; ++i) {
-        std::cout << "Count1: " << i << std::endl;
-    }
+void count1()
+{for(int i = 0; i< 100; i++)
+{cout<<"count 1:" <<i<<endl;
+}
 }
 
-void count2() {
-    for (int i = 1; i <= 100; ++i) {
-        std::cout << "Count2: " << i << std::endl;
-    }
+void count2()
+{for(int i = 0; i< 100; i++)
+{cout<<"count 2:" <<i<<endl;
+}
 }
 
-int main() {
-    std::thread t1(count1);
-    std::thread t2(count2);
+int main()
+{
+thread t1(count1);
+thread t2(count2);
 
-    t1.join();  // Wait for count1 to finish
-    t2.join();  // Wait for count2 to finish
+t1.join();
+t2.join();
 
-    std::cout << "Both threads finished counting." << std::endl;
-    return 0;
+return 8;
 }
+
 
 
 execution: g++ -pthread program_name.cpp -o outputname, then ./outputname
 
 
-
 b)
+
 #include <iostream>
 #include <thread>
 
+using namespace std;
+
 void print_hello(int thread_num) {
-    std::cout << "Hello World from thread " << thread_num << std::endl;
+    cout << "Hello World from thread " << thread_num << endl;
 }
 
 int main() {
-    std::thread threads[5];  // Array to hold the thread objects
+    thread threads[5];  // Array to hold the thread objects
 
     // Create 5 threads
     for (int i = 0; i < 5; ++i) {
-        threads[i] = std::thread(print_hello, i + 1);  // Pass thread number (1 to 5)
+        threads[i] = thread(print_hello, i + 1);  // Pass thread number (1 to 5)
     }
 
-    // Wait for all threads to finish
+  
     for (int i = 0; i < 5; ++i) {
         threads[i].join();
     }
 
-    std::cout << "Main thread has finished creating all threads." << std::endl;
+    cout << "Main thread has finished creating all threads." << std::endl;
 
     return 0;
 }
