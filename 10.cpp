@@ -4,7 +4,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-const int PORT = 8080;
+
 
 int main() {
     // Create socket
@@ -14,7 +14,7 @@ int main() {
     sockaddr_in server_address{};
     server_address.sin_family = AF_INET;
     server_address.sin_addr.s_addr = INADDR_ANY;
-    server_address.sin_port = htons(PORT);
+    server_address.sin_port = htons(8080);
     
     // Bind socket
     bind(server_socket, (struct sockaddr*)&server_address, sizeof(server_address));
